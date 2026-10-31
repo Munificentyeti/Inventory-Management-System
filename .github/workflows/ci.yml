@@ -9,6 +9,11 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "file:./dev.db"
+      JWT_ACCESS_SECRET: "ci-test-jwt-access-secret-minimum-32-chars-long"
+      JWT_REFRESH_SECRET: "ci-test-jwt-refresh-secret-minimum-32-chars-long"
+      NODE_ENV: "test"
 
     steps:
       - name: Checkout repository
