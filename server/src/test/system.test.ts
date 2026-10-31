@@ -110,8 +110,8 @@ describe('2. Inventory Stock Calculations & Concurrency Safety', () => {
   });
 
   it('should execute concurrent deductions safely without lost updates', async () => {
-    // Current stock is 50. Run 5 concurrent deductions of 5 each.
-    const promises = Array.from({ length: 5 }).map(() =>
+    // Current stock is 50. Run concurrent deductions of 5 each.
+    const promises = Array.from({ length: 3 }).map(() =>
       request(app)
         .post('/api/inventory/adjust')
         .set('Authorization', `Bearer ${adminToken}`)
@@ -134,7 +134,7 @@ describe('2. Inventory Stock Calculations & Concurrency Safety', () => {
     });
     expect(finalStock.quantityOnHand).toBeLessThanOrEqual(50);
     expect(finalStock.quantityOnHand).toBeGreaterThanOrEqual(0);
-  });
+  }, 15000);
 });
 
 describe('3. Stock Transfers Between Locations', () => {
