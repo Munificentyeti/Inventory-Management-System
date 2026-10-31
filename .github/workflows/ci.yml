@@ -32,17 +32,25 @@ jobs:
           npm ci
 
       - name: Generate Prisma Client
+        env:
+          DATABASE_URL: "file:./dev.db"
         run: |
           cd server
           npx prisma generate
-          npx prisma db push
+          npx prisma db push --accept-data-loss
 
       - name: Seed Database
+        env:
+          DATABASE_URL: "file:./dev.db"
         run: |
           cd server
           npx tsx prisma/seed.ts
 
       - name: Run Test Suite
+        env:
+          DATABASE_URL: "file:./dev.db"
+          JWT_ACCESS_SECRET: "ci-test-jwt-access-secret-minimum-32-chars-long"
+          JWT_REFRESH_SECRET: "ci-test-jwt-refresh-secret-minimum-32-chars-long"
         run: |
           cd server
           npm test
